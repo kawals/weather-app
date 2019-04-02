@@ -3,7 +3,7 @@ import Title from './components/title';
 import Form from './components/form';
 import Weather from './components/weather';
 
-const API_KEY = 'd5aacbfb40eca3087c632879011c09ae';
+const API_KEY = 'dd0ce0a7ac4d926d09a62d6273bfdef9';
 
 class App extends React.Component {
   state = {
@@ -20,8 +20,7 @@ class App extends React.Component {
     const country = e.target.elements.country.value;
     const api_call = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${API_KEY}&units=metric`);
     const data = await api_call.json();
-
-    if(city && country && data.cod!=='404') {
+    if(city && country && data.cod!== '404' && data.cod!== '401' && data.cod!== '429') {
       this.setState({
         temperature: data.main.temp,
         city: data.name,
@@ -30,6 +29,15 @@ class App extends React.Component {
         description: data.weather[0].description,
         error: ''
       });
+    } else if(data.cod === '429') {
+      this.setState({
+        temperature: undefined,
+        city: undefined,
+        country: undefined,
+        humidity: undefined,
+        description: undefined,
+        error: 'The App is down, please try again after few hours.'
+      });
     } else {
       this.setState({
         temperature: undefined,
@@ -37,7 +45,7 @@ class App extends React.Component {
         country: undefined,
         humidity: undefined,
         description: undefined,
-        error: 'Please enter the value.'
+        error: 'Please enter correct City & Country.'
       });
     }
   }
@@ -48,10 +56,10 @@ class App extends React.Component {
           <div className='main'>
             <div className='container'>
               <div className='row'>
-                <div className='col-xs-5 title-container'>
+                <div className='col-10 col-md-6 title-container'>
                   <Title/>
                 </div>
-                <div className='col-xs-7 form-container'>
+                <div className='col-10 col-md-6 form-container'>
                   <Form getWeather={this.getWeather}/>
                   <Weather
                     temperature={this.state.temperature}

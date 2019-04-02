@@ -11,13 +11,13 @@ const Weather = props => (
       {
         props.temperature &&
         <p className='weather__key'>Temperature:
-          <span className='weather__value'> {props.temperature}</span>
+          <span className='weather__value'> {props.temperature} &#176;C</span>
         </p>
       }
       {
         props.humidity &&
         <p className='weather__key'>Humidity:
-          <span className='weather__value'> {props.humidity}</span>
+          <span className='weather__value'> {props.humidity} %</span>
         </p>
       }
       {
@@ -27,7 +27,7 @@ const Weather = props => (
         </p>
       }
       {
-        props.error && <p>{props.error}</p>
+        props.error && <p style={{color: '#ff0000'}}>{props.error}</p>
       }
     </div>
   );
